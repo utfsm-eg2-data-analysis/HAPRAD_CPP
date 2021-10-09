@@ -5,14 +5,12 @@
 /*                                       */
 /*****************************************/
 
-// June 2021
+// October 2021
 
 #include "Headers.hxx"
 #include "UX.hxx"
 
 int main(int argc, char **argv) {
-
-  gProgram = "GetRC";
 
   /*** INPUT ***/
 
@@ -33,7 +31,7 @@ int main(int argc, char **argv) {
   std::vector<Double_t> phi_centroid;
 
   std::ifstream CentroidsFile;
-  CentroidsFile.open("centroids_" + gTargetOption + ".csv", std::ios::in);
+  CentroidsFile.open(gProDir + "/gfx/rad-corr_" + gParticle + "/centroids_" + gParticle + "_" + gTargetOption + ".csv", std::ios::in);
 
   // exit program if ifstream could not open file
   if (!CentroidsFile) {
@@ -79,7 +77,7 @@ int main(int argc, char **argv) {
   a3 = a1 / a2;
 
   std::ofstream out;
-  out.open("RCFactor_" + gTargetOption + ".txt");
+  out.open("RCFactor_" + gParticle + "_" + gTargetOption + ".txt");
   out << "Phi\tSigmaB\tSigmaOb\tTail1\tTaile2\tFact_noex\tFact_ex" << std::endl;
   for (Int_t i = 0; i < (Int_t)phi_centroid.size(); i++) {
     rc.CalculateRCFactor(5.015, xb_centroid[i], q2_centroid[i], zh_centroid[i], pt_centroid[i], phi_centroid[i], m, NAZ);

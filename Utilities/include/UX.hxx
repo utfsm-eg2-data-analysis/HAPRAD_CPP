@@ -7,38 +7,31 @@
 
 /*** Global variables ***/
 
-TString gDataDir = getenv("DATA_DIR");
-TString gSimDir = getenv("SIM_DIR");
-
 TString gTargetOption;
-Int_t gPID;
+TString gParticle;
 
-TString gProgram = "";
+TString gProDir = getenv("PRODIR");
 
 /*** Input-related functions ***/
 
 void printUsage() {
-  std::cout << gProgram << " program. Usage is:" << std::endl;
+  std::cout << "GetRC program. Usage is: " << std::endl;
   std::cout << std::endl;
-  std::cout << "./" << gProgram << " -h" << std::endl;
+  std::cout << "./GetRC -h" << std::endl;
   std::cout << "    prints this message and exits program" << std::endl;
   std::cout << std::endl;
-  if (gProgram != "GetBinning") {
-    std::cout << "./" << gProgram << " -t[D_C, D_Fe, D_Pb, C, Fe, Pb]" << std::endl;
-    std::cout << "    filters respective target" << std::endl;
-    std::cout << std::endl;
-    if (gProgram != "GetRC") {
-      std::cout << "./" << gProgram << " -p[211, -211, 2212]" << std::endl;
-      std::cout << "    filters respective particle" << std::endl;
-      std::cout << std::endl;
-    }
-  }
+  std::cout << "./GetRC -t[D, A]" << std::endl;
+  std::cout << "    filters liquid target or solid targets" << std::endl;
+  std::cout << std::endl;
+  std::cout << "./GetRC -p[eta, omega]" << std::endl;
+  std::cout << "    selects particle analysis" << std::endl;
+  std::cout << std::endl;
 }
 
 void parseCommandLine(int argc, char* argv[]) {
   Int_t c;
   if (argc == 1) {
-    std::cerr << "Empty command line. Execute ./" << gProgram << " -h to print help." << std::endl;
+    std::cerr << "Empty command line. Execute ./GetRC -h to print help." << std::endl;
     exit(0);
   }
   while ((c = getopt(argc, argv, "ht:p:")) != -1) switch (c) {
@@ -50,24 +43,19 @@ void parseCommandLine(int argc, char* argv[]) {
         gTargetOption = optarg;
         break;
       case 'p':
-        gPID = atoi(optarg);
+        gParticle = optarg;
         break;
       default:
-        std::cerr << "Unrecognized argument. Execute ./" << gProgram << " -h to print help." << std::endl;
+        std::cerr << "Unrecognized argument. Execute ./GetRC -h to print help." << std::endl;
         exit(0);
         break;
     }
 }
 
 void printOptions() {
-  std::cout << "Executing " << gProgram << " program. ";
-  if (gProgram != "GetBinning") {
-    std::cout << "The chosen parameters are: " << std::endl;
-    std::cout << "  gTargetOption   = " << gTargetOption << std::endl;
-    if (gProgram != "GetRC") {
-      std::cout << "  gPID            = " << gPID << std::endl;
-    }
-  }
+  std::cout << "Executing GetRC program. The chosen parameters are: " << std::endl;
+  std::cout << "  gTargetOption = " << gTargetOption << std::endl;
+  std::cout << "  gParticle     = " << gParticle << std::endl;
   std::cout << std::endl;
 }
 

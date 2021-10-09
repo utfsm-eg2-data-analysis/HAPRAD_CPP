@@ -1,7 +1,9 @@
 HAPRAD_CPP/Utilities
 ====================
 
-Collection of four ROOT/C++ programs that use the dynamic library `TRadCor` to do radiative corrections calculations.
+**(Branch: aborquez/analysis-omega)**
+
+`GetRC` uses the dynamic library `TRadCor` to do radiative corrections calculations.
 
 ## Environment
 
@@ -9,15 +11,11 @@ Feel free to modify the variables in `set_env.sh` according to your own environm
 
 ## Usage
 
-**Important:** to use these programs your data files must have been filtered by [**GetSimpleTuple**](http://github.com/utfsm-eg2-data-analysis/GetSimpleTuple).
+**Important:** `GetRC` should only work after the correct execution of all macros in `analysis-omega/macros/rad-corr_<particle>` from the [**analysis-omega**](http://github.com/utfsm-eg2-data-analysis/analysis-omega) repository.
 
-1. Modify `include/Binning.hxx` to the binning of your preference.
+1. Do `source set_env.sh`.
 
-2. **Compile** all programs (see below).
-
-3. Execute `./exec_rad-corr_chain.sh --pid <pid>` where `<pid> = (211, -211, 2212)`.
-
-If everything went well, you should had six files with the Radiative Correction Factors called `RCFactor_<target>.txt` and six images corresponding to the fit of the `PhiPQ` distributions for each target.
+2. Execute `./exec_rad-corr_chain.sh --part <part>` where `<part> = (eta, omega)`.
 
 ## Compilation
 

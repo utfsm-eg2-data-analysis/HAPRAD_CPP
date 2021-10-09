@@ -22,7 +22,7 @@ LDFLAGS := -g -O2 $(ROOTLDFLAGS) -lgfortran -Wl,-rpath,$(HAPRAD_CPP)/slib
 INCLUDES := -I./include -I$(HAPRAD_CPP)
 LIBS := -L$(HAPRAD_CPP)/slib -lTRadCor $(ROOTLIBS) -lMathMore -L$(CERN_LIB) $(CERNLIBS)
 
-PROG := GetBinning GetCentroids FitPhiPQ GetRC
+PROG := GetRC
 LIST := $(addprefix $(BINDIR)/, $(PROG))
 
 .PHONY: all clean
