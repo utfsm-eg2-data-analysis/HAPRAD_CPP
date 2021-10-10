@@ -61,7 +61,11 @@ argArray=("$@")
 process_args "${argArray[@]}"
 print_args
 
-targets=("D" "A")
+if [[ "${part}" == "eta" ]]; then
+    targets=("D" "C" "Fe" "Pb")
+else
+    targets=("D" "A")
+fi
 
 # move to main dir
 cd ${HAPRAD_CPP}/Utilities
