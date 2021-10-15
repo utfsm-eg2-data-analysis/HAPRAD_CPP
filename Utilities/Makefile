@@ -1,6 +1,8 @@
-#SHELL = /bin/bash
-
 .DELETE_ON_ERROR:
+
+ifndef ROOTSYS
+    $(error "ERROR: please, set the variable ROOTSYS")
+endif
 
 MKDIR_P := mkdir -p
 
@@ -8,19 +10,16 @@ BINDIR := ./bin
 SRCDIR := ./src
 
 ROOTCONFIG := root-config
-ROOTCFLAGS := $(shell $(ROOTCONFIG) --cflags)
-ROOTLDFLAGS := $(shell $(ROOTCONFIG) --ldflags)
-ROOTLIBS := $(shell $(ROOTCONFIG) --libs)
-CERNLIBS := -lpdflib804 -lmathlib -lphtools -lpacklib -lkernlib -lpawlib
+ROOTCFLAGS := $(shell $(ROOTCONFIG) --cxx --cflags)
+ROOTLDFLAGS := $(shell $(ROOTCONFIG) --cxx --ldflags)
+ROOTGLIBS := $(shell $(ROOTCONFIG) --glibs)
 
-CXX := c++ # -D DEBUG
-LD := c++
+CERNLIBS := -L$(CERN_LIB) -lpdflib804 -lmathlib -lphtools -lpacklib -lkernlib -lpawlib
 
-CXXFLAGS := -g -O2 -Wall -fPIC $(ROOTCFLAGS)
-LDFLAGS := -g -O2 $(ROOTLDFLAGS) -lgfortran -Wl,-rpath,$(HAPRAD_CPP)/slib
+LDFLAGS := -lgfortran -Wl,-rpath,$(HAPRAD_CPP)/slib
 
 INCLUDES := -I./include -I$(HAPRAD_CPP)
-LIBS := -L$(HAPRAD_CPP)/slib -lTRadCor $(ROOTLIBS) -lMathMore -L$(CERN_LIB) $(CERNLIBS)
+LIBS := -L$(HAPRAD_CPP)/slib -lTRadCor $(ROOTGLIBS) $(CERNLIBS)
 
 PROG := GetRC
 LIST := $(addprefix $(BINDIR)/, $(PROG))
@@ -29,13 +28,14 @@ LIST := $(addprefix $(BINDIR)/, $(PROG))
 
 all: $(LIST)
 
-$(BINDIR)/%:$(BINDIR)/%.o
-	@echo "Doing application" $@
-	$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
+$(BINDIR)/%: $(BINDIR)/%.o
+	@echo "Linking" $<
+	$(ROOTLDFLAGS) $(LDFLAGS) $^ $(LIBS) -o $@
 
-$(BINDIR)/%.o:$(SRCDIR)/%.cxx
+$(BINDIR)/%.o: $(SRCDIR)/%.cxx
+	@echo "Compiling" $<
 	$(MKDIR_P) $(BINDIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+	$(ROOTCFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	@rm -rf $(LIST:%=%.o) $(LIST)
